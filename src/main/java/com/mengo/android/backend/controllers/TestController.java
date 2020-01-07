@@ -2,7 +2,7 @@ package com.mengo.android.backend.controllers;
 
 import com.mengo.android.backend.beans.User;
 import com.mengo.android.backend.serviceImpl.UserServices;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mengo.android.backend.utils.ResultJson;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +14,11 @@ import java.util.List;
 public class TestController {
 
 
-    @Autowired
-    private UserServices userServices;
+    private final UserServices userServices;
+
+    public TestController(UserServices userServices) {
+        this.userServices = userServices;
+    }
 
     @RequestMapping("/index")
     public String index() {
@@ -26,21 +29,22 @@ public class TestController {
     @RequestMapping("/getAll")
     @ResponseBody
     public List<User> getAllUser() {
-        List<User> users = userServices.getAll();
-        return users;
+        return userServices.getAll();
     }
 
     @RequestMapping("/loginAction")
     @ResponseBody
     public String loginAction(@RequestParam("username") String username, @RequestParam("pwd") String pwd) {
-        if (username.equals("admin")) {
-            if (pwd.equals("159357")) {
-                return "success";
+        User user = userServices.getUserByName(username);
+        ResultJson resultJson = new ResultJson();
+        if (user != null) {
+            if (user.getPassword().equals(pwd)) {
+                return resultJson.success();
             } else {
-                return "password error!";
+                return resultJson.error("password error");
             }
         } else {
-            return "username error!";
+            return resultJson.error("username error");
         }
     }
 }

@@ -11,4 +11,7 @@
     <select id="get" resultType="com.mengo.android.backend.beans.User">
         select * from user_table
     </select>
+    <select id="getUserByName" resultType="com.mengo.android.backend.beans.User" parameterType="string">
+        select * from user_table where user_name=#{username}
+    </select>
 </mapper>
