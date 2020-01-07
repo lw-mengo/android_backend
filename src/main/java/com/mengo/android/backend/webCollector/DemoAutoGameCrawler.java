@@ -17,7 +17,7 @@ public class DemoAutoGameCrawler extends BreadthCrawler {
          * addSeed表示添加种子
          * 种子链接会在爬虫启动之前加入到爬取信息中并标记为未抓取状态，这个过程称为注入
          */
-        this.addSeed("https://www.2dfan.com/subjects/page/1");
+        this.addSeedAndReturn("https://www.2dfan.com/subjects/").type("list");
         /**
          * 循环添加4个种子，其实就是分页，结果类似：
          * https://www.2dfan.com/subjects/page/2
@@ -27,12 +27,13 @@ public class DemoAutoGameCrawler extends BreadthCrawler {
          */
         for (int pageIndex = 2; pageIndex <= 5; pageIndex++) {
             String seedUrl = String.format("https://www.2dfan.com/subjects/page/%d", pageIndex);
-            this.addSeed(seedUrl);
+            this.addSeed(seedUrl,"list");
         }
         /**
          * addRegex 参数为一个url正则表达式，可以用于过滤不必抓取的链接，比如.js .jpg .css……等
          * 也可以指定抓取某些规则的链接，
          */
+//        this.addRegex("https://www.2dfan.com/subjects/page/.*");
 
         /**
          * 设置线程数
@@ -54,27 +55,23 @@ public class DemoAutoGameCrawler extends BreadthCrawler {
         /**
          * 如果此页面地址 确实是要求爬取的网址，则进行取值
          */
-        if (page.matchUrl("https://www.2dfan.com/subjects/page/^[1-5]$/")){
+        if (page.matchType("list")) {
+            System.out.println("::::::::" + url);
             Elements elements = page.select("h4[class=media-heading]");
-            for(Element e:elements){
+            for (Element e : elements) {
                 System.out.println(e.text());
             }
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         /**
          * 构造器中进行数据初始化，这2个参数会传递给父类
          * crawlPath:表示设置保存爬虫记录的文件夹
          */
-        DemoAutoGameCrawler crawler = new DemoAutoGameCrawler("crawl",true);
-        try {
-            /**
-             * 启动爬虫，爬取的深度为4层
-             */
-            crawler.start(4);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DemoAutoGameCrawler crawler = new DemoAutoGameCrawler("crawl", false);
+        crawler.getConf().setExecuteInterval(5000);
+        crawler.start(4);
+
     }
 }
