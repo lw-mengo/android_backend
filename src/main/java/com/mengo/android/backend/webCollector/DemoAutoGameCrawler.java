@@ -71,7 +71,7 @@ public class DemoAutoGameCrawler extends BreadthCrawler {
          */
         DemoAutoGameCrawler crawler = new DemoAutoGameCrawler("crawl", false);
         crawler.getConf().setExecuteInterval(5000);
-        crawler.start(4);
+        crawler.start(1);
 
     }
 }
