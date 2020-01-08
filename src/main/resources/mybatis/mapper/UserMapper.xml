@@ -6,12 +6,15 @@
         <result column="id" jdbcType="INTEGER" property="id"/>
         <result column="user_name" jdbcType="VARCHAR" property="user_name"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="salt_word" jdbcType="VARCHAR" property="salt_word"/>
     </resultMap>
-
     <select id="get" resultType="com.mengo.android.backend.beans.User">
         select * from user_table
     </select>
     <select id="getUserByName" resultType="com.mengo.android.backend.beans.User" parameterType="string">
         select * from user_table where user_name=#{username}
     </select>
+    <insert id="registerUser"  parameterType="com.mengo.android.backend.beans.User">
+        insert into user_table (user_name,password,salt_word) values (#{user_name},#{password},#{salt_word})
+    </insert>
 </mapper>

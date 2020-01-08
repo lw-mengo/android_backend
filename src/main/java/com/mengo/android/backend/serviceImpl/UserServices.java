@@ -2,7 +2,6 @@ package com.mengo.android.backend.serviceImpl;
 
 import com.mengo.android.backend.beans.User;
 import com.mengo.android.backend.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,5 +20,9 @@ public class UserServices {
 
     public User getUserByName(String username) {
         return userMapper.getUserByName(username);
+    }
+
+    public void registerUser(User user) {
+        userMapper.registerUser(user);
     }
 }
